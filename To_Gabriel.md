@@ -18,5 +18,10 @@ So I took a look at the readme and the project and what I gathered these things
 * Good to consider adding mutation tests to ensure we keep that percentage 
 * Gabriel did such a great job
 
+## Mutation tests
+I learned how to integrate mutation tests in gradle for you Gabriel. I hope you are proud of this 
+achievement like I am.
 
+### You own mutation test results
+![your mutation test results](src/main/resources/first_mutation_test_results.png)
 
