@@ -22,6 +22,12 @@ So I took a look at the readme and the project and what I gathered these things
 I learned how to integrate mutation tests in gradle for you Gabriel. I hope you are proud of this 
 achievement like I am.
 
-### You own mutation test results
+### Your own mutation test results
 ![your mutation test results](src/main/resources/first_mutation_test_results.png)
+
+#### Let's start
+
+First I created the command structure : this is how we will map our json command into an object for manipulation.
+
+
 
