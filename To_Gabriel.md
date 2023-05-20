@@ -29,5 +29,11 @@ achievement like I am.
 
 First I created the command structure : this is how we will map our json command into an object for manipulation.
 
+I created the base structure for the endpoint and the three functions where I will implement the command 
+processing logic. 
 
+The endpoint accepts multiple commands so i probably will need to consider how i will ensure the handling of correct and incorrect
+commands (bad types or bad user id).
+
+For now this will do. My next step is going to be implementing tests to get a better vision of how the logic will look like. 
 

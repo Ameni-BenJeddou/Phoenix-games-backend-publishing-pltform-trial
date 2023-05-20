@@ -2,6 +2,7 @@ package com.spotlight.platform.userprofile.api.core.profile;
 
 import com.spotlight.platform.userprofile.api.core.exceptions.EntityNotFoundException;
 import com.spotlight.platform.userprofile.api.core.profile.persistence.UserProfileDao;
+import com.spotlight.platform.userprofile.api.model.command.Command;
 import com.spotlight.platform.userprofile.api.model.profile.UserProfile;
 import com.spotlight.platform.userprofile.api.model.profile.primitives.UserId;
 
@@ -17,5 +18,17 @@ public class UserProfileService {
 
     public UserProfile get(UserId userId) {
         return userProfileDao.get(userId).orElseThrow(EntityNotFoundException::new);
+    }
+
+    public UserProfile replace(Command command) {
+        return null;
+    }
+
+    public UserProfile increment(Command command) {
+        return null;
+    }
+
+    public UserProfile collect(Command command) {
+        return null;
     }
 }
