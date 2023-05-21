@@ -37,3 +37,13 @@ commands (bad types or bad user id).
 
 For now this will do. My next step is going to be implementing tests to get a better vision of how the logic will look like. 
 
+### Moving to tests
+
+I have implemented some tests to demonstrate how the wanted processing of commands will be.
+
+Doing these tests i realised there are some problem cases that need to be handled :
+* Case of incorrect command type
+* Case of invalid User Id in the command 
+* What should we do in the case of correct command but properties that do not exist (accept the command and add the property or count the command as invalid) will send an email tomorrow to inquire.
+
+Since these are things that are handled in the resource I will write integration tests for that regard
