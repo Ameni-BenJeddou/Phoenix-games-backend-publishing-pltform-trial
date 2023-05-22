@@ -17,7 +17,7 @@ public class UserProfileFixtures {
 
     public static final Instant LAST_UPDATE_TIMESTAMP = Instant.parse("2021-06-01T09:16:36.123Z");
 
-    public static final UserProfile USER_PROFILE = new UserProfile(USER_ID, LAST_UPDATE_TIMESTAMP,
+    public static UserProfile USER_PROFILE = new UserProfile(USER_ID, LAST_UPDATE_TIMESTAMP,
             Map.of(UserProfilePropertyName.valueOf("replace_property"), UserProfilePropertyValue.valueOf("property_before_Value"),
                     UserProfilePropertyName.valueOf("increment_property"), UserProfilePropertyValue.valueOf(50),
                     UserProfilePropertyName.valueOf("collect_property"), UserProfilePropertyValue.valueOf((Arrays.asList("Before_Item1", "Before_Item2", "Before_Item3")))));

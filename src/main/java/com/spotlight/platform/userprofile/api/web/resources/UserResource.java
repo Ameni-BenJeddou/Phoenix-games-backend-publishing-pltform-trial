@@ -1,5 +1,7 @@
 package com.spotlight.platform.userprofile.api.web.resources;
 
+import com.spotlight.platform.userprofile.api.core.exceptions.EntityNotFoundException;
+import com.spotlight.platform.userprofile.api.core.exceptions.InvalidCommandException;
 import com.spotlight.platform.userprofile.api.core.profile.UserProfileService;
 import com.spotlight.platform.userprofile.api.model.command.Command;
 import com.spotlight.platform.userprofile.api.model.profile.UserProfile;
@@ -15,7 +17,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Path("/users/{userId}")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -37,14 +41,19 @@ public class UserResource {
 
     @Path("command")
     @PUT
-    public Response receiveCommand(@Valid @PathParam("userId") List<Command> commands) {
+    public Response receiveCommand(@Valid @PathParam("commandList") List<Command> commands) {
+        Map<Command, String> incorrect_Commands = new HashMap<>();
         for (Command command : commands) {
-            switch (command.getType()) {
-                case "replace" -> userProfileService.replace(command);
-                case "increment" -> userProfileService.increment(command);
-                case "collect" -> userProfileService.collect(command);
+            try {
+                UserProfile userProfile = userProfileService.get(command.getUserId());
+                userProfileService.processCommand(userProfile, command);
+            } catch (InvalidCommandException | EntityNotFoundException exception) {
+                incorrect_Commands.put(command, exception.getMessage());
             }
         }
-        return Response.ok().build();
+        // is probably gibberish
+        if (incorrect_Commands.isEmpty())
+            return Response.status(Response.Status.NO_CONTENT).build();
+        else return Response.ok(incorrect_Commands).build();
     }
 }

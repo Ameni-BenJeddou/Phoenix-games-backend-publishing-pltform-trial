@@ -25,7 +25,7 @@ achievement like I am.
 ### Your own mutation test results
 ![your mutation test results](src/main/resources/first_mutation_test_results.png)
 
-#### Let's start
+## Let's start
 
 First I created the command structure : this is how we will map our json command into an object for manipulation.
 
@@ -46,4 +46,19 @@ Doing these tests i realised there are some problem cases that need to be handle
 * Case of invalid User Id in the command 
 * What should we do in the case of correct command but properties that do not exist (accept the command and add the property or count the command as invalid) will send an email tomorrow to inquire.
 
-Since these are things that are handled in the resource I will write integration tests for that regard
+Since these are things that are handled in the resource I will write integration tests for that regard.
+
+### Refactoring
+I was on the bus and i realized: why am i giving the endpoint the responsibility of calling the specific service function 
+This is the responsibility of the service, and it should be handled accordingly.
+So I will do some changes to reflect that in the code. Both the service and it's tests will be changed and I will add the invalid type test in the service tests
+
+For the case of non-existing properties we found that the properties will be added with the initial values being 0 for increment and empty array for collect
+
+I wrote some not very well coded attempt at handling incorrect commands in our list of commands. 
+
+See Gabriel I want to be able to accept the correct commands and give back to the user the incorrect ones with the error message.
+If I don't find a way to do that I will simply resolve to not accepting all the list if one command is incorrect but that does not sound ideal to me.
+
+Tomorrow I will add some more tests for the cases of non-existing properties and then start implementing the logic behind the process.
+    
