@@ -61,4 +61,20 @@ See Gabriel I want to be able to accept the correct commands and give back to th
 If I don't find a way to do that I will simply resolve to not accepting all the list if one command is incorrect but that does not sound ideal to me.
 
 Tomorrow I will add some more tests for the cases of non-existing properties and then start implementing the logic behind the process.
-    
+
+### Oups
+
+Dear Gabriel , i got the case of the tunnel vision. 
+
+In the tests i kept trying to assert the property with it's assigned value . so i was depending on the Users current state which is .. not smart 
+
+I changed it so that the property value is retrieved from the current state of the user, I compare it with a dynamically created expected value
+
+I added 4 tests to test the cases of non-existing properties being handled
+
+For now, I decided that for the collect method, the value will be a List of UserProfilePropertyValues and for the Increment method the allowed value will be an int and replace values should not be null =>
+For this reason will add more tests to ensure Proper handling.
+
+I think Tests are done and I will start implementing methods. I think i will sleep on it first, maybe I think of some other case to test for
+
+After all I'm still not in a hurry and this is turning out to be quite a fun little project, and I honestly can't wait for the feedback. 

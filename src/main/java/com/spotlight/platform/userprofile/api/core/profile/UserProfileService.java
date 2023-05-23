@@ -8,11 +8,11 @@ import com.spotlight.platform.userprofile.api.model.profile.UserProfile;
 import com.spotlight.platform.userprofile.api.model.profile.primitives.UserId;
 
 import javax.inject.Inject;
-import javax.ws.rs.core.Response;
 
 public class UserProfileService {
     private final UserProfileDao userProfileDao;
     public static final String INVALID_COMMAND_TYPE = "This command type is invalid";
+    public static final String INVALID_VALUE = "This value is invalid";
 
     @Inject
     public UserProfileService(UserProfileDao userProfileDao) {

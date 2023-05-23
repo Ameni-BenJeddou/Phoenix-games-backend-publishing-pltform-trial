@@ -21,6 +21,10 @@ public class UserProfilePropertyValue {
         return value;
     }
 
+    public Object getValueObject() {
+        return value;
+    }
+
     @Override
     public int hashCode() {
         return value.hashCode();
