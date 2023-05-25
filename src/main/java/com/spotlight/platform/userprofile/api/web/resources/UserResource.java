@@ -16,7 +16,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,22 +37,20 @@ public class UserResource {
     public UserProfile getUserProfile(@Valid @PathParam("userId") UserId userId) {
         return userProfileService.get(userId);
     }
-
+/*
     @Path("command")
     @PUT
-    public Response receiveCommand(@Valid @PathParam("commandList") List<Command> commands) {
-        Map<Command, String> incorrect_Commands = new HashMap<>();
+    public Map<Command, String> receiveCommand(@Valid @PathParam("commandList") List<Command> commands) {
+        Map<Command, String> command_status = new HashMap<>();
         for (Command command : commands) {
             try {
                 UserProfile userProfile = userProfileService.get(command.getUserId());
                 userProfileService.processCommand(userProfile, command);
+                command_status.put(command, "successful:");
             } catch (InvalidCommandException | EntityNotFoundException exception) {
-                incorrect_Commands.put(command, exception.getMessage());
+                command_status.put(command, "oups:"+ exception.getMessage());
             }
         }
-        // is probably gibberish
-        if (incorrect_Commands.isEmpty())
-            return Response.status(Response.Status.NO_CONTENT).build();
-        else return Response.ok(incorrect_Commands).build();
-    }
+        return command_status;
+    } */
 }
