@@ -103,14 +103,14 @@ class UserProfileServiceTest {
         void Test_collectForValidCommand_returnOkay() {
             //Arrange
             Command collect_Command = new Command(UserProfileFixtures.USER_ID, "collect", UserProfileFixtures.EXISTING_PROPERTY_COLLECT);
-            var expected_Value = new ArrayList<>((List<UserProfilePropertyValue>) UserProfileFixtures.USER_PROFILE.userProfileProperties()
+            List<UserProfilePropertyValue> expected_Value = new ArrayList<>((List<UserProfilePropertyValue>) UserProfileFixtures.USER_PROFILE.userProfileProperties()
                     .get(UserProfilePropertyName.valueOf("collect_property")).getValueObject());
             expected_Value.addAll(UserProfileFixtures.COLLECTION_AFTER_ADD);
             //Act
             UserProfile updatedUser = userProfileService.processCommand(UserProfileFixtures.USER_PROPERTIES, collect_Command);
 
             //Assert
-            assertThat(updatedUser.userProfileProperties().get((UserProfilePropertyName.valueOf("new_collect_property")))).
+            assertThat(updatedUser.userProfileProperties().get((UserProfilePropertyName.valueOf("collect_property")))).
                     isEqualTo(UserProfilePropertyValue.valueOf(expected_Value));
         }
 

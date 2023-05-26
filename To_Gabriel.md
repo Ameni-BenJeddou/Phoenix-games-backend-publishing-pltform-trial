@@ -87,10 +87,6 @@ I was working with the intention to make everything as general as possible so th
 
 For example i made the equals compare to string values so that the testing is easier and i kept it that llavalues are object that get cast for manipulation.
 
-Problem is for the collect i am getting an unsupported operation exception and i can't figure out why. maybe it is the general use of object or i made a bobo somewhere
+My problem was with the collect methode.
 
-I unfortunately have had some things come up that made me not be 100% focused on this task as I was when i started it (we all have our goats gabriel)
-
-But I will try and find an elegant solution to this.
-
-Good news replace and increment are working as expected more work needed on the exceptions.  
+=======> i did in fact fix it by working some brain cells xD

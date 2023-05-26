@@ -11,6 +11,7 @@ import com.spotlight.platform.userprofile.api.model.profile.primitives.UserProfi
 
 import javax.inject.Inject;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class UserProfileService {
         return userProfileDao.get(userId).orElseThrow(EntityNotFoundException::new);
     }
 
-    public UserProfile processCommand(Map<UserProfilePropertyName, UserProfilePropertyValue> propertyMap, Command command) throws InvalidCommandException {
+    public UserProfile processCommand(Map<UserProfilePropertyName, UserProfilePropertyValue> propertyMap, Command command) {
         Map<UserProfilePropertyName, UserProfilePropertyValue> newmap = new HashMap<>(propertyMap);
         switch (command.getType()) {
             case "replace" -> {
@@ -60,7 +61,7 @@ public class UserProfileService {
 
     private UserProfile increment(Map<UserProfilePropertyName, UserProfilePropertyValue> propertyMap, Command command) {
         for (Map.Entry<UserProfilePropertyName, UserProfilePropertyValue> property : command.getProperties().entrySet()) {
-            if ((property.getValue() == null) && !(property.getValue().getValueObject() instanceof Integer)) {
+            if ((property.getValue() == null) || !(property.getValue().getValueObject() instanceof Integer)) {
                 throw new InvalidCommandException(INVALID_VALUE);
             } else {
                 if (!propertyMap.containsKey(property.getKey())) {
@@ -80,13 +81,13 @@ public class UserProfileService {
 
     private UserProfile collect(Map<UserProfilePropertyName, UserProfilePropertyValue> propertyMap, Command command) {
         for (Map.Entry<UserProfilePropertyName, UserProfilePropertyValue> property : command.getProperties().entrySet()) {
-            if ((property.getValue() == null) && !(property.getValue().getValueObject() instanceof List)) {
+            if ((property.getValue() == null) || !(property.getValue().getValueObject() instanceof List)) {
                 throw new InvalidCommandException(INVALID_VALUE);
             } else {
                 if (!propertyMap.containsKey(property.getKey())) {
                     propertyMap.put(property.getKey(), property.getValue());
                 } else {
-                    List<UserProfilePropertyValue> newValue = (List<UserProfilePropertyValue>) propertyMap.get(property.getKey()).getValueObject();
+                    List<UserProfilePropertyValue> newValue = new ArrayList<>((List<UserProfilePropertyValue>) propertyMap.get(property.getKey()).getValueObject());
                     newValue.addAll((List<UserProfilePropertyValue>) property.getValue().getValueObject());
                     propertyMap.put(property.getKey(), UserProfilePropertyValue.valueOf(newValue));
                 }
