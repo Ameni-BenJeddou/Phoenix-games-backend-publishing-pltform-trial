@@ -78,3 +78,19 @@ For this reason will add more tests to ensure Proper handling.
 I think Tests are done and I will start implementing methods. I think i will sleep on it first, maybe I think of some other case to test for
 
 After all I'm still not in a hurry and this is turning out to be quite a fun little project, and I honestly can't wait for the feedback. 
+
+## The all mighty collect
+
+Well , i come across a wall. 
+
+I was working with the intention to make everything as general as possible so that it is easier to add new commands.
+
+For example i made the equals compare to string values so that the testing is easier and i kept it that llavalues are object that get cast for manipulation.
+
+Problem is for the collect i am getting an unsupported operation exception and i can't figure out why. maybe it is the general use of object or i made a bobo somewhere
+
+I unfortunately have had some things come up that made me not be 100% focused on this task as I was when i started it (we all have our goats gabriel)
+
+But I will try and find an elegant solution to this.
+
+Good news replace and increment are working as expected more work needed on the exceptions.  

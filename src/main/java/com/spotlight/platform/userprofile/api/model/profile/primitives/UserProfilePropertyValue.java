@@ -26,6 +26,13 @@ public class UserProfilePropertyValue {
     }
 
     @Override
+    public String toString() {
+        return "UserProfilePropertyValue{" +
+                "value=" + value +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
         return value.hashCode();
     }
@@ -35,7 +42,7 @@ public class UserProfilePropertyValue {
         if (obj == null || this.getClass() != obj.getClass()) {
             return false;
         }
-        return value.equals(((UserProfilePropertyValue) obj).getValue());
+        return value.toString().equals(((UserProfilePropertyValue)obj).getValue().toString());
     }
 }
 

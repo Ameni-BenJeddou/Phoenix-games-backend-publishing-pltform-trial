@@ -4,6 +4,7 @@ import com.spotlight.platform.userprofile.api.core.exceptions.EntityNotFoundExce
 import com.spotlight.platform.userprofile.api.core.exceptions.InvalidCommandException;
 import com.spotlight.platform.userprofile.api.core.profile.persistence.UserProfileDao;
 import com.spotlight.platform.userprofile.api.model.command.Command;
+import com.spotlight.platform.userprofile.api.model.profile.UserProfile;
 import com.spotlight.platform.userprofile.api.model.profile.primitives.UserId;
 import com.spotlight.platform.userprofile.api.model.profile.primitives.UserProfileFixtures;
 
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,26 +56,31 @@ class UserProfileServiceTest {
         void Test_replaceForValidCommand_returnOkay() {
             //Arrange
             Command replace_Command = new Command(UserProfileFixtures.USER_ID, "replace", UserProfileFixtures.EXISTING_PROPERTY_REPLACE);
-            UserProfilePropertyValue expected_Value = UserProfileFixtures.EXISTING_PROPERTY_REPLACE
+            var expected_Value = UserProfileFixtures.EXISTING_PROPERTY_REPLACE
                     .get(UserProfilePropertyName.valueOf("replace_property"));
             //Act
-            userProfileService.processCommand(UserProfileFixtures.USER_PROFILE, replace_Command);
+            UserProfile updatedUser = userProfileService.processCommand(UserProfileFixtures.USER_PROPERTIES, replace_Command);
 
             //Assert
-            assertThat(UserProfileFixtures.USER_PROFILE.userProfileProperties().get((UserProfilePropertyName.valueOf("replace_property")))).isEqualTo(expected_Value);
+            assertThat(updatedUser.userProfileProperties().get((UserProfilePropertyName.valueOf("replace_property")))).
+                    isEqualTo(expected_Value);
         }
 
         @Test
         void Test_incrementPositivelyForValidCommand_returnOkay() {
             //Arrange
             Command increment_Command = new Command(UserProfileFixtures.USER_ID, "increment", UserProfileFixtures.EXISTING_PROPERTY_INCREMENT_POSITIVE);
-            UserProfilePropertyValue expected_Value = UserProfileFixtures.EXISTING_PROPERTY_INCREMENT_POSITIVE
-                    .get(UserProfilePropertyName.valueOf("increment_property"));
+            int expected_Value = (int) UserProfileFixtures.EXISTING_PROPERTY_INCREMENT_POSITIVE
+                    .get(UserProfilePropertyName.valueOf("increment_property")).getValueObject()
+                    + (int) UserProfileFixtures.USER_PROFILE.userProfileProperties()
+                    .get(UserProfilePropertyName.valueOf("increment_property")).getValueObject();
             //Act
-            userProfileService.processCommand(UserProfileFixtures.USER_PROFILE, increment_Command);
+            UserProfile updatedUser = userProfileService.processCommand(UserProfileFixtures.USER_PROPERTIES, increment_Command);
 
             //Assert
-            assertThat(UserProfileFixtures.USER_PROFILE.userProfileProperties().get((UserProfilePropertyName.valueOf("increment_property"))).toString()).isEqualTo(String.valueOf(60));
+            assertThat(updatedUser.userProfileProperties().get((UserProfilePropertyName.valueOf("increment_property")))).
+                    isEqualTo(UserProfilePropertyValue.valueOf(expected_Value));
+
         }
 
         @Test
@@ -85,25 +92,26 @@ class UserProfileServiceTest {
                     (int) UserProfileFixtures.EXISTING_PROPERTY_INCREMENT_NEGATIVE
                             .get(UserProfilePropertyName.valueOf("increment_property")).getValueObject();
             //Act
-            userProfileService.processCommand(UserProfileFixtures.USER_PROFILE, increment_Command);
+            UserProfile updatedUser = userProfileService.processCommand(UserProfileFixtures.USER_PROPERTIES, increment_Command);
 
             //Assert
-            assertThat(UserProfileFixtures.USER_PROFILE.userProfileProperties().get((UserProfilePropertyName.valueOf("increment_property")))).isEqualTo(UserProfilePropertyValue.valueOf(expected_Value));
+            assertThat(updatedUser.userProfileProperties().get((UserProfilePropertyName.valueOf("increment_property")))).
+                    isEqualTo(UserProfilePropertyValue.valueOf(expected_Value));
         }
 
         @Test
         void Test_collectForValidCommand_returnOkay() {
             //Arrange
             Command collect_Command = new Command(UserProfileFixtures.USER_ID, "collect", UserProfileFixtures.EXISTING_PROPERTY_COLLECT);
-            List<UserProfilePropertyValue> expected_Value = (List<UserProfilePropertyValue>) UserProfileFixtures.USER_PROFILE.userProfileProperties()
-                    .get(UserProfilePropertyName.valueOf("collect_property")).getValueObject();
+            var expected_Value = new ArrayList<>((List<UserProfilePropertyValue>) UserProfileFixtures.USER_PROFILE.userProfileProperties()
+                    .get(UserProfilePropertyName.valueOf("collect_property")).getValueObject());
             expected_Value.addAll(UserProfileFixtures.COLLECTION_AFTER_ADD);
             //Act
-            userProfileService.processCommand(UserProfileFixtures.USER_PROFILE, collect_Command);
+            UserProfile updatedUser = userProfileService.processCommand(UserProfileFixtures.USER_PROPERTIES, collect_Command);
 
             //Assert
-            assertThat(UserProfileFixtures.USER_PROFILE.userProfileProperties().get((UserProfilePropertyName.valueOf("collect_property"))))
-                    .isEqualTo(UserProfilePropertyValue.valueOf(expected_Value));
+            assertThat(updatedUser.userProfileProperties().get((UserProfilePropertyName.valueOf("new_collect_property")))).
+                    isEqualTo(UserProfilePropertyValue.valueOf(expected_Value));
         }
 
         @Test
@@ -113,10 +121,11 @@ class UserProfileServiceTest {
             UserProfilePropertyValue expected_Value = UserProfileFixtures.NON_EXISTING_REPLACE_PROPERTY
                     .get(UserProfilePropertyName.valueOf("new_replace_property"));
             //Act
-            userProfileService.processCommand(UserProfileFixtures.USER_PROFILE, replace_Command);
+            UserProfile updatedUser = userProfileService.processCommand(UserProfileFixtures.USER_PROPERTIES, replace_Command);
 
             //Assert
-            assertThat(UserProfileFixtures.USER_PROFILE.userProfileProperties().get((UserProfilePropertyName.valueOf("new_replace_property")))).isEqualTo(expected_Value);
+            assertThat(updatedUser.userProfileProperties().get((UserProfilePropertyName.valueOf("new_replace_property")))).
+                    isEqualTo(expected_Value);
         }
 
         @Test
@@ -126,12 +135,11 @@ class UserProfileServiceTest {
             UserProfilePropertyValue expected_Value = UserProfileFixtures.NON_EXISTING_INCREMENT_POSITIVELY_PROPERTY
                     .get(UserProfilePropertyName.valueOf("new_increment_property"));
             //Act
-            userProfileService.processCommand(UserProfileFixtures.USER_PROFILE, increment_Command);
+            UserProfile updatedUser = userProfileService.processCommand(UserProfileFixtures.USER_PROPERTIES, increment_Command);
 
             //Assert
-            assertThat(UserProfileFixtures.USER_PROFILE.userProfileProperties()
-                    .get((UserProfilePropertyName.valueOf("new_increment_property"))))
-                    .isEqualTo(expected_Value);
+            assertThat(updatedUser.userProfileProperties().get((UserProfilePropertyName.valueOf("new_increment_property")))).
+                    isEqualTo(expected_Value);
         }
 
         @Test
@@ -140,14 +148,12 @@ class UserProfileServiceTest {
             Command increment_Command = new Command(UserProfileFixtures.USER_ID, "increment", UserProfileFixtures.NON_EXISTING_INCREMENT_NEGATIVELY_PROPERTY);
             UserProfilePropertyValue expected_Value = UserProfileFixtures.NON_EXISTING_INCREMENT_NEGATIVELY_PROPERTY
                     .get(UserProfilePropertyName.valueOf("new_increment_property"));
-
             //Act
-            userProfileService.processCommand(UserProfileFixtures.USER_PROFILE, increment_Command);
+            UserProfile updatedUser = userProfileService.processCommand(UserProfileFixtures.USER_PROPERTIES, increment_Command);
 
             //Assert
-            assertThat(UserProfileFixtures.USER_PROFILE.userProfileProperties()
-                    .get((UserProfilePropertyName.valueOf("new_increment_property"))))
-                    .isEqualTo(expected_Value);
+            assertThat(updatedUser.userProfileProperties().get((UserProfilePropertyName.valueOf("new_increment_property")))).
+                    isEqualTo(expected_Value);
         }
 
         @Test
@@ -156,14 +162,12 @@ class UserProfileServiceTest {
             Command collect_Command = new Command(UserProfileFixtures.USER_ID, "collect", UserProfileFixtures.NON_EXISTING_COLLECT_PROPERTY);
             UserProfilePropertyValue expected_Value = UserProfileFixtures.NON_EXISTING_COLLECT_PROPERTY
                     .get(UserProfilePropertyName.valueOf("new_collect_property"));
-
             //Act
-            userProfileService.processCommand(UserProfileFixtures.USER_PROFILE, collect_Command);
+            UserProfile updatedUser = userProfileService.processCommand(UserProfileFixtures.USER_PROPERTIES, collect_Command);
 
             //Assert
-            assertThat(UserProfileFixtures.USER_PROFILE.userProfileProperties()
-                    .get((UserProfilePropertyName.valueOf("new_collect_property"))))
-                    .isEqualTo(expected_Value);
+            assertThat(updatedUser.userProfileProperties().get((UserProfilePropertyName.valueOf("new_collect_property")))).
+                    isEqualTo(expected_Value);
         }
 
         @Test
@@ -173,7 +177,7 @@ class UserProfileServiceTest {
 
             //Act
             InvalidCommandException exception = catchThrowableOfType(() ->
-                    userProfileService.processCommand(UserProfileFixtures.USER_PROFILE, replace_Command), InvalidCommandException.class);
+                    userProfileService.processCommand(UserProfileFixtures.USER_PROPERTIES, replace_Command), InvalidCommandException.class);
 
             //Assert
             assertThat(exception.getMessage()).isEqualTo(INVALID_VALUE);
@@ -186,7 +190,7 @@ class UserProfileServiceTest {
 
             //Act
             InvalidCommandException exception = catchThrowableOfType(() ->
-                    userProfileService.processCommand(UserProfileFixtures.USER_PROFILE, increment_Command), InvalidCommandException.class);
+                    userProfileService.processCommand(UserProfileFixtures.USER_PROPERTIES, increment_Command), InvalidCommandException.class);
 
             //Assert
             assertThat(exception.getMessage()).isEqualTo(INVALID_VALUE);
@@ -199,7 +203,7 @@ class UserProfileServiceTest {
 
             //Act
             InvalidCommandException exception = catchThrowableOfType(() ->
-                    userProfileService.processCommand(UserProfileFixtures.USER_PROFILE, collect_Command), InvalidCommandException.class);
+                    userProfileService.processCommand(UserProfileFixtures.USER_PROPERTIES, collect_Command), InvalidCommandException.class);
 
             //Assert
             assertThat(exception.getMessage()).isEqualTo(INVALID_VALUE);
@@ -212,7 +216,7 @@ class UserProfileServiceTest {
 
             //Act
             InvalidCommandException exception = catchThrowableOfType(() ->
-                    userProfileService.processCommand(UserProfileFixtures.USER_PROFILE, invalid_Command), InvalidCommandException.class);
+                    userProfileService.processCommand(UserProfileFixtures.USER_PROPERTIES, invalid_Command), InvalidCommandException.class);
 
             //Assert
             assertThat(exception.getMessage()).isEqualTo(INVALID_COMMAND_TYPE);
