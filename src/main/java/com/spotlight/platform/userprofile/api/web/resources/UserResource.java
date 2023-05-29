@@ -10,17 +10,18 @@ import com.spotlight.platform.userprofile.api.model.profile.primitives.UserId;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Path("/users/{userId}")
+@Path("/users")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
@@ -32,25 +33,26 @@ public class UserResource {
         this.userProfileService = userProfileService;
     }
 
-    @Path("profile")
+    @Path("profile/{userId}")
     @GET
     public UserProfile getUserProfile(@Valid @PathParam("userId") UserId userId) {
         return userProfileService.get(userId);
     }
-/*
-    @Path("command")
+
     @PUT
-    public Map<Command, String> receiveCommand(@Valid @PathParam("commandList") List<Command> commands) {
-        Map<Command, String> command_status = new HashMap<>();
-        for (Command command : commands) {
+    @Path("command")
+    public Response receiveCommand( @Valid List<Command> commands) {
+        Map<String, String> command_status = new HashMap<>();
+        for (int i=0; i<commands.size();i++) {
+            Command command = commands.get(i);
             try {
                 UserProfile userProfile = userProfileService.get(command.getUserId());
-                userProfileService.processCommand(userProfile, command);
-                command_status.put(command, "successful:");
+                userProfileService.processCommand(userProfile.userProfileProperties(), command);
+                command_status.put("command number "+i, " was successful:");
             } catch (InvalidCommandException | EntityNotFoundException exception) {
-                command_status.put(command, "oups:"+ exception.getMessage());
+                command_status.put("command number "+i, " has failed because: " + exception.getMessage());
             }
-        }
-        return command_status;
-    } */
+      }
+            return Response.accepted(command_status).build();
+    }
 }

@@ -85,8 +85,20 @@ Well , i come across a wall.
 
 I was working with the intention to make everything as general as possible so that it is easier to add new commands.
 
-For example i made the equals compare to string values so that the testing is easier and i kept it that llavalues are object that get cast for manipulation.
+For example i made the equals compare to string values so that the testing is easier and i kept it that all values are object that get cast for manipulation.
 
 My problem was with the collect methode.
 
 =======> i did in fact fix it by working some brain cells xD
+
+## Endpoint 
+
+I created the endpoint. It should process all commands even if some would throw an exception.
+
+It returns an accepted response with a map indicating where the errors have occurred (if they did).
+
+I am going to write some integration tests.
+
+##Question for you
+Why are u heavily using mocks for integration tests. Should I also use mocks like that cuw I usually don't. 
+

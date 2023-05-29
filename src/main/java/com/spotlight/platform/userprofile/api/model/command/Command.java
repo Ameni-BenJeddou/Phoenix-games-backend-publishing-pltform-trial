@@ -1,18 +1,29 @@
 package com.spotlight.platform.userprofile.api.model.command;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spotlight.platform.userprofile.api.model.profile.primitives.UserId;
 import com.spotlight.platform.userprofile.api.model.profile.primitives.UserProfilePropertyName;
 import com.spotlight.platform.userprofile.api.model.profile.primitives.UserProfilePropertyValue;
 
+import javax.validation.constraints.NotNull;
 import java.util.Map;
-public class Command {
 
+public class Command {
+    @NotNull
+    @JsonProperty
     private UserId userId;
+    @JsonProperty
+    @NotNull
     private String type;
+    @JsonProperty
+    @NotNull
     private Map<UserProfilePropertyName, UserProfilePropertyValue> properties;
 
     public UserId getUserId() {
         return userId;
+    }
+
+    public Command() {
     }
 
     public void setUserId(UserId userId) {
