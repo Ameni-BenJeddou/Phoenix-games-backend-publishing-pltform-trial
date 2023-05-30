@@ -53,9 +53,6 @@ public class UserProfileFixtures {
     public static final Map<UserProfilePropertyName, UserProfilePropertyValue> NON_EXISTING_COLLECT_PROPERTY =
             Map.of(UserProfilePropertyName.valueOf("new_collect_property"), UserProfilePropertyValue.valueOf(COLLECTION_AFTER_ADD));
 
-    public static final Map<UserProfilePropertyName, UserProfilePropertyValue> REPLACE_COMMAND_WITH_NULL_VALUE =
-            Map.of(UserProfilePropertyName.valueOf("replace_property"), UserProfilePropertyValue.valueOf(null));
-
     public static final Map<UserProfilePropertyName, UserProfilePropertyValue> INCREMENT_COMMAND_WITH_INVALID_VALUE =
             Map.of(UserProfilePropertyName.valueOf("increment_property"), UserProfilePropertyValue.valueOf("I am not a number"));
 

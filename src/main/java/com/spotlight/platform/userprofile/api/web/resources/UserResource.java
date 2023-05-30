@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Path("/users")
+@Path("/users/{userId}")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
@@ -33,7 +33,7 @@ public class UserResource {
         this.userProfileService = userProfileService;
     }
 
-    @Path("profile/{userId}")
+    @Path("profile")
     @GET
     public UserProfile getUserProfile(@Valid @PathParam("userId") UserId userId) {
         return userProfileService.get(userId);
@@ -41,18 +41,25 @@ public class UserResource {
 
     @PUT
     @Path("command")
-    public Response receiveCommand( @Valid List<Command> commands) {
+    public Response receiveCommand(@Valid List<Command> commands) {
         Map<String, String> command_status = new HashMap<>();
-        for (int i=0; i<commands.size();i++) {
+        boolean is_errors = false;
+        for (int i = 0; i < commands.size(); i++) {
             Command command = commands.get(i);
             try {
                 UserProfile userProfile = userProfileService.get(command.getUserId());
                 userProfileService.processCommand(userProfile.userProfileProperties(), command);
-                command_status.put("command number "+i, " was successful:");
+                command_status.put("command number " + i, " was successful");
             } catch (InvalidCommandException | EntityNotFoundException exception) {
-                command_status.put("command number "+i, " has failed because: " + exception.getMessage());
+                is_errors = true;
+                command_status.put("command number " + i, " has failed because: " + exception.getMessage());
             }
-      }
+        }
+        if (!command_status.containsValue(" was successful"))
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        else if (is_errors)
             return Response.accepted(command_status).build();
+        else
+            return Response.ok().build();
     }
 }

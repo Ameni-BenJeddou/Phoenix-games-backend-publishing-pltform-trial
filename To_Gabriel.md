@@ -46,8 +46,6 @@ Doing these tests i realised there are some problem cases that need to be handle
 * Case of invalid User Id in the command 
 * What should we do in the case of correct command but properties that do not exist (accept the command and add the property or count the command as invalid) will send an email tomorrow to inquire.
 
-Since these are things that are handled in the resource I will write integration tests for that regard.
-
 ### Refactoring
 I was on the bus and i realized: why am i giving the endpoint the responsibility of calling the specific service function 
 This is the responsibility of the service, and it should be handled accordingly.
@@ -55,7 +53,7 @@ So I will do some changes to reflect that in the code. Both the service and it's
 
 For the case of non-existing properties we found that the properties will be added with the initial values being 0 for increment and empty array for collect
 
-I wrote some not very well coded attempt at handling incorrect commands in our list of commands. 
+I wrote some not very well coded attempt at handling incorrect commands in our list of commands (they turned out to be actually pretty decently coded). 
 
 See Gabriel I want to be able to accept the correct commands and give back to the user the incorrect ones with the error message.
 If I don't find a way to do that I will simply resolve to not accepting all the list if one command is incorrect but that does not sound ideal to me.
@@ -77,7 +75,7 @@ For this reason will add more tests to ensure Proper handling.
 
 I think Tests are done and I will start implementing methods. I think i will sleep on it first, maybe I think of some other case to test for
 
-After all I'm still not in a hurry and this is turning out to be quite a fun little project, and I honestly can't wait for the feedback. 
+After all I'm still not in a hurry(What I didn't know, I had some wisdom tooth problems which resulted in me eventually being in a hurry xD ) and this is turning out to be quite a fun little project, and I honestly can't wait for the feedback. 
 
 ## The all mighty collect
 
@@ -99,6 +97,18 @@ It returns an accepted response with a map indicating where the errors have occu
 
 I am going to write some integration tests.
 
-##Question for you
-Why are u heavily using mocks for integration tests. Should I also use mocks like that cuw I usually don't. 
+## Final steps 
 
+I changed up the response a bit : Just for the sake of logging our results properly: now if all the commands are invalid then it returns a bad request
+if some are correct and some are false it returns accepted but with the map of the state of the commands 
+and if all are correct returns ok response.
+
+I wrote some integration tests and corrected the unit test.
+
+## Mutation test results 
+![your mutation test results](src/main/resources/My final mutation test results.png)
+
+I did add a bit of test strength and mutation coverage, but I personally would want to improve that (i'm not very satisfied)
+BUT I did already take a lot of time and Gabriel needs my work so I will try and put my perfectionism to rest for this time and call it a job done.
+
+(I say a job done but I will probably keep working on this after I send it to you to appease my own conscience plus it is a good training project)

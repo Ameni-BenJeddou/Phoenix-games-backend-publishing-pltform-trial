@@ -170,18 +170,6 @@ class UserProfileServiceTest {
                     isEqualTo(expected_Value);
         }
 
-        @Test
-        void Test_ReplaceForInValidCommandInvalidValue_throwException() {
-            //Arrange
-            Command replace_Command = new Command(UserProfileFixtures.USER_ID, "replace", UserProfileFixtures.REPLACE_COMMAND_WITH_NULL_VALUE);
-
-            //Act
-            InvalidCommandException exception = catchThrowableOfType(() ->
-                    userProfileService.processCommand(UserProfileFixtures.USER_PROPERTIES, replace_Command), InvalidCommandException.class);
-
-            //Assert
-            assertThat(exception.getMessage()).isEqualTo(INVALID_VALUE);
-        }
 
         @Test
         void Test_IncrementForInValidCommandInvalidValue_throwException() {
