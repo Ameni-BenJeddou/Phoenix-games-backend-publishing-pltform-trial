@@ -3,8 +3,11 @@ package com.spotlight.platform.userprofile.api.model.profile.primitives;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import javax.validation.constraints.NotNull;
+
 public class UserProfilePropertyValue {
 
+    @NotNull
     private final Object value;
 
     @JsonCreator
@@ -42,7 +45,7 @@ public class UserProfilePropertyValue {
         if (obj == null || this.getClass() != obj.getClass()) {
             return false;
         }
-        return value.toString().equals(((UserProfilePropertyValue)obj).getValue().toString());
+        return value.toString().equals(((UserProfilePropertyValue) obj).getValue().toString());
     }
 }
 

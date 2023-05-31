@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class UserProfileService {
     private final UserProfileDao userProfileDao;
@@ -47,7 +48,13 @@ public class UserProfileService {
     }
 
     private UserProfile replace(Map<UserProfilePropertyName, UserProfilePropertyValue> propertyMap, Command command) {
-        propertyMap.putAll(command.getProperties());
+        for (Map.Entry<UserProfilePropertyName, UserProfilePropertyValue> property : command.getProperties().entrySet()) {
+            if (Objects.equals(property.getValue(), null)) {
+                throw new InvalidCommandException(INVALID_VALUE);
+            } else {
+                propertyMap.put(property.getKey(), property.getValue());
+            }
+        }
         UserProfile updatedUserProfile = new UserProfile(command.getUserId(), Instant.now(), propertyMap);
         userProfileDao.put(updatedUserProfile);
         return updatedUserProfile;
@@ -55,7 +62,7 @@ public class UserProfileService {
 
     private UserProfile increment(Map<UserProfilePropertyName, UserProfilePropertyValue> propertyMap, Command command) {
         for (Map.Entry<UserProfilePropertyName, UserProfilePropertyValue> property : command.getProperties().entrySet()) {
-            if (!(property.getValue().getValueObject() instanceof Integer)) {
+            if ((Objects.equals(property.getValue(), null)) || !(property.getValue().getValueObject() instanceof Integer)) {
                 throw new InvalidCommandException(INVALID_VALUE);
             } else {
                 if (!propertyMap.containsKey(property.getKey())) {
@@ -75,7 +82,7 @@ public class UserProfileService {
 
     private UserProfile collect(Map<UserProfilePropertyName, UserProfilePropertyValue> propertyMap, Command command) {
         for (Map.Entry<UserProfilePropertyName, UserProfilePropertyValue> property : command.getProperties().entrySet()) {
-            if (!(property.getValue().getValueObject() instanceof List)) {
+            if ((Objects.equals(property.getValue(), null)) || !(property.getValue().getValueObject() instanceof List)) {
                 throw new InvalidCommandException(INVALID_VALUE);
             } else {
                 if (!propertyMap.containsKey(property.getKey())) {

@@ -49,10 +49,10 @@ public class UserResource {
             try {
                 UserProfile userProfile = userProfileService.get(command.getUserId());
                 userProfileService.processCommand(userProfile.userProfileProperties(), command);
-                command_status.put("command number " + i, " was successful");
+                command_status.put("command number " + i+1, " was successful");
             } catch (InvalidCommandException | EntityNotFoundException exception) {
                 is_errors = true;
-                command_status.put("command number " + i, " has failed because: " + exception.getMessage());
+                command_status.put("command number " + i+1, " has failed because: " + exception.getMessage());
             }
         }
         if (!command_status.containsValue(" was successful"))
